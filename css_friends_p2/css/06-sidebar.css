@@ -1,1 +1,11 @@
 /* PHASE 0: Sidebar */
+
+.content-sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.s1 {
+    margin-bottom: 30px;
+}
