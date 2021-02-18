@@ -102,8 +102,38 @@ Board.prototype.isOccupied = function (pos) {
  *
  * Returns empty array if no pieces of the opposite color are found.
  */
+// Board.DIRS = [
+//   [ 0,  1], [ 1,  1], [ 1,  0],
+//   [ 1, -1], [ 0, -1], [-1, -1],
+//   [-1,  0], [-1,  1]
+// ];
+// isValidPos(pos) - give false when x or y reaches end of board
+// getPiece(pos) - returns the piece at pos 
+// isMine(pos, color) - checks if color at pos is true 
+// isOccupied(pos) - checks if there is a piece at pos
 Board.prototype._positionsToFlip = function(pos, color, dir, piecesToFlip){
+  
+  
+  if (piecesToFlip === undefined) {
+    piecesToFlip = [];
+  }
+
+  let new_move = [pos[0] + dir[0], pos[1] + dir[1]];
+
+  if ( !this.isValidPos(new_move)) {
+    return [];
+  } else if ((!this.isOccupied(new_move))) {
+    return [];
+  } else if (this.isMine(new_move, color)) {
+    return [];
+  };
+
+  
+  piecesToFlip.push(new_move) +this._positionsToFlip(new_move, color, dir, piecesToFlip);
+  return piecesToFlip;
+
 };
+
 
 /**
  * Checks that a position is not already occupied and that the color
@@ -111,6 +141,21 @@ Board.prototype._positionsToFlip = function(pos, color, dir, piecesToFlip){
  * color being flipped.
  */
 Board.prototype.validMove = function (pos, color) {
+  if (this.isOccupied(pos)) {
+    return false
+  }
+  Board.DIRS.forEach((dir) => {
+    debugger
+    let arr = this._positionsToFlip(pos, color, dir)
+
+    if (arr.length !== 0) {
+      return true;
+    };
+    
+  });
+    
+  return false;
+
 };
 
 /**
